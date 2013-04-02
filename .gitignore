@@ -1,0 +1,8 @@
+
+*.jpg
+
+icon.key/Contents/PkgInfo
+
+*.plist
+
+*.gz
