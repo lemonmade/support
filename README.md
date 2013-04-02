@@ -28,3 +28,7 @@ OmniFocus has another way to run scripts, and it's even easier than the method d
 
 ## Version History
 - **0.1.0** (April 2, 2013): Initial release.
+
+
+## License
+Use it, change it, repackage it, whatever. Try not to take credit for my work.
