@@ -72,11 +72,14 @@ tell application "OmniFocus"
 		end repeat
 		
 		try
-			if application id "com.cocoatech.PathFinder" is running then
-				tell application id "com.cocoatech.PathFinder"
-					activate
-					open thePaths
-				end tell
+			if (my isRunning("com.cocoatech.PathFinder")) then
+				run script "
+					on run {thePaths}
+						tell application id \"com.cocoatech.PathFinder\" 
+							activate
+							open thePaths
+						end tell
+					end run" with parameters {thePaths}
 			else
 				tell application id "com.apple.finder"
 					repeat with aFolder in thePaths
@@ -150,3 +153,9 @@ on changePath(thePath)
 	set text item delimiters to ":"
 	return (thePath as text)
 end changePath
+
+on isRunning(bundleId)
+	tell application "System Events"
+		(bundle identifier of processes) contains bundleId
+	end tell
+end isRunning
