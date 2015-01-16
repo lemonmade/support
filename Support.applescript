@@ -59,6 +59,7 @@ tell application "OmniFocus"
 			else
 				try
 					set chosenFolder to (choose folder with prompt "Select the folder that contains the reference material for the project " & quote & (name of theProject) & quote & ".") as string
+					set chosenFolder to my removeHomeFolder(chosenFolder)
 				on error
 					return
 				end try
@@ -71,31 +72,23 @@ tell application "OmniFocus"
 			end if
 		end repeat
 		
-		try
-			if application id "com.cocoatech.PathFinder" is running then
-				tell application id "com.cocoatech.PathFinder"
-					activate
-					open thePaths
-				end tell
-			else
-				tell application id "com.apple.finder"
-					repeat with aFolder in thePaths
-						open folder aFolder
-					end repeat
-					activate
-				end tell
-			end if
-		on error
-			tell application id "com.apple.finder"
-				repeat with aFolder in thePaths
-					open folder aFolder
-				end repeat
-				activate
-			end tell
-		end try
+		
+		tell application id "com.apple.finder"
+			repeat with aFolder in thePaths
+				open folder aFolder
+			end repeat
+			activate
+		end tell
 		
 	end tell
 end tell
+
+on removeHomeFolder(chosenFolder)
+	set text item delimiters to (path to home folder as text)
+	set chosenFolder to every text item of chosenFolder
+	set text item delimiters to ""
+	return chosenFolder as string
+end removeHomeFolder
 
 on inList(theItem, theList)
 	if length of theList is 0 then return false
@@ -141,12 +134,5 @@ on identifyFolder(theNote)
 	set text item delimiters to {folderDelim & " ", folderDelim}
 	set theText to every text item of theText
 	set text item delimiters to ""
-	set theText to theText as text
+	set theText to (path to home folder as text) & (theText as text)
 end identifyFolder
-
-on changePath(thePath)
-	set text item delimiters to "/"
-	set thePath to every text item of thePath
-	set text item delimiters to ":"
-	return (thePath as text)
-end changePath
